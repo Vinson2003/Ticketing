@@ -1,0 +1,238 @@
+﻿@{
+    ViewData["Title"] = "Role Permission";
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="bi bi-shield-lock me-1"></i>
+            Role Permission Management
+        </h3>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Role</label>
+                <select id="roleId" asp-items="@ViewBag.RoleList" class="form-select">
+                    <option value="">
+                        Select Role
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <hr />
+
+        <div id="permissionContainer" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Permissions</h5>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnSelectAll">
+                        <i class="bi bi-check2-square me-1"></i>
+                        Select All
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnClearAll">
+                        <i class="bi bi-square me-1"></i>
+                        Clear All
+                    </button>
+                </div>
+            </div>
+
+            <div id="permissionList" class="row g-2"></div>
+
+            <div class="mt-4">
+                <button type="button" class="btn btn-primary" id="btnSavePermission">
+                    <i class="bi bi-save me-1"></i>
+                    Save Permission
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $('#roleId').on('change', function() {
+
+            var roleId = $(this).val();
+
+            $('#permissionList').empty();
+            $('#permissionContainer').hide();
+
+            if (!roleId) {
+                return;
+            }
+
+            loadPermissions(roleId);
+        });
+
+
+        function loadPermissions(roleId) {
+
+            $.ajax({
+                url: '@Url.Action("GetRolePermissions", "Permission")',
+                type: 'GET',
+                data: {
+                    roleId: roleId
+                },
+
+                success: function(response) {
+
+                    if (!response.success) {
+                        Swal.fire({
+                            title: 'Failed',
+                            text: response.message,
+                            icon: 'error'
+                        });
+                        return;
+                    }
+
+                    var permissions = response.data;
+
+                    $('#permissionList').empty();
+
+                    permissions.forEach(function(item) {
+
+                        var checked = item.isChecked ? 'checked' : '';
+
+                        $('#permissionList').append(`
+                            <div class="col-md-6 col-lg-4">
+
+                                <div class="border rounded p-3">
+
+                                    <div class="form-check">
+
+                                        <input class="form-check-input permission-check"
+                                                type="checkbox"
+                                                value="${item.permissionId}"
+                                                id="permission_${item.permissionId}"
+                                                ${checked} />
+
+                                        <label class="form-check-label"
+                                                for="permission_${item.permissionId}">
+
+                                            <strong>
+                                                ${item.display}
+                                            </strong>
+
+                                            <small class="d-block text-secondary">
+                                                ${item.description}
+                                            </small>
+
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        `);
+                    });
+
+                    $('#permissionContainer').show();
+                },
+
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to load permissions.',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+
+        $('#btnSelectAll').on('click', function() {
+            $('.permission-check').prop('checked', true);
+        });
+
+
+        $('#btnClearAll').on('click', function() {
+            $('.permission-check').prop('checked', false);
+        });
+
+
+        $('#btnSavePermission').on('click', function() {
+
+            var roleId = $('#roleId').val();
+
+            if (!roleId) {
+                return;
+            }
+
+            var permissionIds = [];
+
+            $('.permission-check:checked').each(function() {
+                permissionIds.push(
+                    parseInt($(this).val())
+                );
+            });
+
+            Swal.fire({
+                title: 'Save Permission?',
+                text: 'Are you sure you want to update this role permission?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, save it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $('#btnSavePermission').prop('disabled', true)
+                .html(`
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    Saving...
+                `);
+
+                $.ajax({
+                    url: '@Url.Action("Save", "Permission")',
+                    type: 'POST',
+                    traditional: true,
+                    data: {
+                        RoleId: roleId,
+                        PermissionIds: permissionIds
+                    },
+                    success: function(response) {
+
+                        if (!response.success) {
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+
+                        showSuccessToast(
+                            response.message
+                        );
+                    },
+
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to save permission.',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function() {
+                        $('#btnSavePermission').prop('disabled', false)
+                        .html(` <i class="bi bi-save me-1"></i>
+                            Save Permission
+                        `);
+                    }
+                });
+
+            });
+        });
+    </script>
+}

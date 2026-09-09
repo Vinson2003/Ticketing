@@ -1,0 +1,74 @@
+﻿@model TicketingSystem.Service.ServiceModel.ProfileResponse
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row">
+
+    <div class="col-lg-8">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="bi bi-person-circle me-1"></i>
+                    User Profile
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary">
+                            Username
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.Username
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary">
+                            Name
+                        </label>
+
+                        <div class="fw-semibold">
+                            @Model.Name
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary">
+                            Email
+                        </label>
+
+                        <div class="fw-semibold">
+                            @(Model.Email ?? "-")
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary">
+                            Role
+                        </label>
+
+                        <div>
+                            <span class="badge text-bg-primary">
+                                @Model.RoleName
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

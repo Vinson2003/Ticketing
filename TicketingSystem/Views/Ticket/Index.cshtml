@@ -1,0 +1,766 @@
+﻿@using TicketingSystem.Helper
+@{
+    ViewData["Title"] = "Tickets";
+
+    bool permsCreate = PermissionHelper.CheckPerms(User, ViewBag.Perms, "ticket-create");
+    bool permsDetails = PermissionHelper.CheckPerms(User, ViewBag.Perms, "ticket-details");
+    bool permsUpdate = PermissionHelper.CheckPerms(User, ViewBag.Perms, "ticket-update");
+    bool permsDelete = PermissionHelper.CheckPerms(User, ViewBag.Perms, "ticket-delete");
+}
+
+<!-- Filter -->
+<div class="card mb-3">
+
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="bi bi-funnel me-1"></i>
+            Filters
+        </h3>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <!-- Search -->
+            <div class="col-md-4">
+                <label class="form-label">Search</label>
+                <input type="search" id="searchTicket" class="form-control" placeholder="Search Ticket No / Title / Description" />
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-2">
+                <label class="form-label">Category</label>
+
+                <select id="searchCategory" asp-items="@ViewBag.CategoryList" class="form-select">
+                    <option value="">All Category</option>
+                </select>
+            </div>
+
+            <!-- Priority -->
+            <div class="col-md-2">
+                <label class="form-label">Priority</label>
+
+                <select id="searchPriority" asp-items="@ViewBag.PriorityList" class="form-select">
+                    <option value="">All Priority</option>
+                </select>
+            </div>
+
+            <!-- Status -->
+            <div class="col-md-2">
+                <label class="form-label">Status</label>
+
+                <select id="searchStatus" asp-items="@ViewBag.StatusList" class="form-select">
+                    <option value="">All Status</option>
+                </select>
+            </div>
+
+            <!-- Created By -->
+            <div class="col-md-3">
+                <label class="form-label">Created By</label>
+
+                <select id="searchCreatedBy" asp-items="@ViewBag.UserList" class="form-select">
+                    <option value="">All User</option>
+                </select>
+            </div>
+
+            <!-- Assigned To -->
+            <div class="col-md-3">
+                <label class="form-label">Assigned To</label>
+
+                <select id="searchAssignedTo" asp-items="@ViewBag.UserList" class="form-select">
+                    <option value="">All User</option>
+                </select>
+            </div>
+
+            <!-- Created From -->
+            <div class="col-md-3">
+                <label class="form-label">Created From</label>
+
+                <input type="date" id="searchCreatedFrom" class="form-control" />
+            </div>
+
+            <!-- Created To -->
+            <div class="col-md-3">
+                <label class="form-label">Created To</label>
+
+                <input type="date" id="searchCreatedTo" class="form-control" />
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-12">
+                <button type="button" class="btn btn-primary btn-sm" onclick="tableTicket()">
+                    <i class="bi bi-search me-1"></i>
+                    Search
+                </button>
+
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetTicketFilter()">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Ticket Table -->
+<div class="card">
+
+    <div class="card-header">
+
+        <h3 class="card-title">Ticket List</h3>
+
+        @if (permsCreate)
+        {
+            <div class="card-tools me-2">
+                <button type="button" class="btn btn-primary btn-sm" id="btnCreateTicket">
+                    <i class="bi bi-plus me-1"></i>
+                    Create Ticket
+                </button>
+            </div>
+        }
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table id="tableTicket" class="table table-bordered table-striped table-hover w-100">
+
+                <thead>
+                    <tr>
+                        <th>Ticket No</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Assigned To</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+@if(permsCreate || permsDetails || permsUpdate)
+{
+    @await Html.PartialAsync("_Modal")
+}
+
+@section Scripts
+{
+    <script>
+        const permsDetails = @permsDetails.ToString().ToLower();
+        const permsUpdate = @permsUpdate.ToString().ToLower();
+        const permsDelete = @permsDelete.ToString().ToLower();
+
+        var ticketTable;
+        $(() => {
+            tableTicket();
+            // Search ketika tekan Enter
+            $('#searchTicket').on('keypress', function(e) {
+                if (e.which === 13) {
+                    tableTicket();
+                }
+            });
+
+        });
+
+        function tableTicket() {
+            if (!ticketTable) {
+                ticketTable = $('#tableTicket').DataTable({
+                    responsive: true,
+                    searching: false,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '@Url.Action("GetTickets", "Ticket")',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: function(d) {
+                            d.Search = $('#searchTicket').val();
+                            d.CategoryId = $('#searchCategory').val();
+                            d.PriorityId = $('#searchPriority').val();
+                            d.StatusId = $('#searchStatus').val();
+                            d.CreatedBy = $('#searchCreatedBy').val();
+                            d.AssignedTo = $('#searchAssignedTo').val();
+                            d.CreatedFrom = $('#searchCreatedFrom').val();
+                            d.CreatedTo = $('#searchCreatedTo').val();
+                        }
+                    },
+
+                    columns: [
+                        { data: 'ticketNo' },
+                        { data: 'title' },
+                        { data: 'categoryName' },
+                        { data: 'priorityName' },
+                        { data: 'statusName' },
+                        { data: 'createdByName' },
+                        { data: 'assignedToName', render: function(data) {
+                                return data ?? '-';
+                            }
+                        },
+                        { data: 'createdAtText' },
+                        { data: 'id', orderable: false, searchable: false,
+                            render: function(data, type, row) {
+
+                                let buttons = '';
+
+                                if (permsDetails) {
+                                    buttons += `
+                                        <button type="button"
+                                                class="btn btn-info btn-sm"
+                                                onclick="DetailTicket(${row.id})"
+                                                title="Detail">
+
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    `;
+                                }
+
+                                if (permsUpdate) {
+                                    buttons += `
+                                        <button type="button"
+                                                class="btn btn-warning btn-sm"
+                                                onclick="EditTicket(${row.id})"
+                                                title="Edit">
+
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                    `;
+                                }
+
+                                if (permsDelete) {
+                                    buttons += `
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="DeleteTicket(${row.id}, '${row.ticketNo}')"
+                                                title="Delete">
+
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    `;
+                                }
+
+                                return buttons || '-';
+                            }
+                        }
+                    ],
+                    order: [
+                        [7, 'desc']
+                    ]
+                });
+            }
+            else {
+                ticketTable.ajax.reload();
+            }
+        }
+
+        function resetTicketFilter() {
+            $('#searchTicket').val('');
+            $('#searchCategory').val('');
+            $('#searchPriority').val('');
+            $('#searchStatus').val('');
+            $('#searchCreatedBy').val('');
+            $('#searchAssignedTo').val('');
+            $('#searchCreatedFrom').val('');
+            $('#searchCreatedTo').val('');
+            tableTicket();
+        }
+
+    </script>
+
+    <script>
+
+        // Detail Ticket
+        function DetailTicket(id) {
+            $.ajax({
+                url: '@Url.Action("Details", "Ticket")',
+                type: 'GET',
+                data: { id: id },
+                success: function(response) {
+
+                    if (!response.success) {
+                        Swal.fire({
+                            title: 'Failed',
+                            text: response.message,
+                            icon: 'error'
+                        });
+                        return;
+                    }
+
+                    var data = response.data;
+
+                    $('#detailTicketNo').text(data.ticketNo ?? '-');
+                    $('#detailTitle').text(data.title ?? '-');
+                    $('#detailDescription').text(data.description ?? '-');
+
+                    $('#detailCategory').text(data.categoryName ?? '-');
+
+                    $('#detailCreatedBy').text(data.createdByName ?? '-');
+                    $('#detailAssignedTo').text(data.assignedToName ?? '-');
+
+                    $('#detailCreatedAt').text(data.createdAtText ?? '-');
+
+                    var statusClass = 'text-bg-secondary';
+
+                    switch ((data.statusName ?? '').toLowerCase()) {
+
+                        case 'open': statusClass = 'text-bg-primary';
+                            break;
+
+                        case 'in progress': statusClass = 'text-bg-warning';
+                            break;
+
+                        case 'resolved': statusClass = 'text-bg-success';
+                            break;
+
+                        case 'closed': statusClass = 'text-bg-secondary';
+                            break;
+                    }
+
+                    $('#detailStatus').removeClass().addClass('badge ' + statusClass).text(data.statusName ?? '-');
+
+                    var priorityClass = 'text-bg-secondary';
+
+                    switch ((data.priorityName ?? '').toLowerCase()) {
+
+                        case 'low': priorityClass = 'text-bg-success';
+                            break;
+
+                        case 'medium': priorityClass = 'text-bg-warning';
+                            break;
+
+                        case 'high': priorityClass = 'text-bg-danger';
+                            break;
+
+                        case 'critical': priorityClass = 'text-bg-danger';
+                            break;
+                    }
+
+                    $('#detailPriority').removeClass().addClass('badge ' + priorityClass).text(data.priorityName ?? '-');
+
+                    var modal = bootstrap.Modal.getOrCreateInstance(
+                        document.getElementById('modalTicketDetail')
+                    );
+
+                    modal.show();
+
+                    LoadTicketHistory(id);
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to retrieve ticket detail.',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+
+        $('#modalDetailTicket').on('hidden.bs.modal', function () {
+
+            $('#ticketHistory').html('');
+
+        });
+        
+        // Create Ticket
+        $('#btnCreateTicket').on('click', function() {
+
+            $('#formCreateTicket')[0].reset();
+
+            var modal = bootstrap.Modal.getOrCreateInstance(
+                document.getElementById('modalCreateTicket')
+            );
+
+            modal.show();
+        });
+
+        function CreateTicket() {
+
+            var form = document.getElementById('formCreateTicket');
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            Swal.fire({
+                title: 'Create Ticket?',
+                text: 'Are you sure you want to create this ticket?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, create it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                var data = {
+                    Title: $('#createTitle').val(),
+                    Description: $('#createDescription').val(),
+                    CategoryId: $('#createCategory').val(),
+                    PriorityId: $('#createPriority').val(),
+                    AssignedTo: $('#createAssignedTo').val()
+                };
+
+                $('#btnSaveTicket').prop('disabled', true)
+                .html(`
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    Saving...
+                `);
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Ticket")',
+                    type: 'POST',
+                    data: data,
+
+                    success: function(response) {
+
+                        if (!response.success) {
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+
+                        var modal = bootstrap.Modal.getInstance(
+                            document.getElementById('modalCreateTicket')
+                        );
+
+                        modal.hide();
+
+                        $('#formCreateTicket')[0].reset();
+
+                        ticketTable.ajax.reload(null, false);
+
+                        showSuccessToast(response.message);
+                    },
+
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to create ticket.',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function() {
+                        $('#btnSaveTicket').prop('disabled', false)
+                        .html(`
+                            <i class="bi bi-save me-1"></i>
+                            Save
+                        `);
+                    }
+                });
+            });
+        }
+
+        // Edit Ticket
+        function EditTicket(id) {
+
+            $.ajax({
+                url: '@Url.Action("Details", "Ticket")',
+                type: 'GET',
+                data: {
+                    id: id
+                },
+
+                success: function(response) {
+                    if (!response.success) {
+                        alert(response.message);
+                        return;
+                    }
+
+                    var data = response.data;
+
+                    $('#editId').val(data.id);
+                    $('#editTicketNo').val(data.ticketNo);
+                    $('#editTitle').val(data.title);
+                    $('#editDescription').val(data.description);
+                    $('#editCategory').val(data.categoryId);
+                    $('#editPriority').val(data.priorityId);
+                    $('#editStatus').val(data.statusId);
+                    $('#editAssignedTo').val(data.assignedTo ?? '');
+
+                    var modal = bootstrap.Modal.getOrCreateInstance(
+                        document.getElementById('modalEditTicket')
+                    );
+
+                    modal.show();
+                },
+
+                error: function() {
+                    alert('Failed to retrieve ticket data.');
+                }
+            });
+        }
+
+        function UpdateTicket() {
+
+            var form = document.getElementById('formEditTicket');
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            Swal.fire({
+                title: 'Update Ticket?',
+                text: 'Are you sure you want to save these changes?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, update it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                var data = {
+                    Id: $('#editId').val(),
+                    Title: $('#editTitle').val(),
+                    Description: $('#editDescription').val(),
+                    CategoryId: $('#editCategory').val(),
+                    PriorityId: $('#editPriority').val(),
+                    StatusId: $('#editStatus').val(),
+                    AssignedTo: $('#editAssignedTo').val()
+                };
+
+                $('#btnUpdateTicket').prop('disabled', true)
+                    .html(`
+                        <span class="spinner-border spinner-border-sm me-1"></span>
+                        Updating...
+                    `);
+
+                $.ajax({
+                    url: '@Url.Action("Update", "Ticket")',
+                    type: 'POST',
+                    data: data,
+
+                    success: function(response) {
+
+                        if (!response.success) {
+
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+
+                            return;
+                        }
+
+                        var modal = bootstrap.Modal.getInstance(
+                            document.getElementById('modalEditTicket')
+                        );
+
+                        modal.hide();
+
+                        ticketTable.ajax.reload(null, false);
+
+                        showSuccessToast(response.message);
+                    },
+
+                    error: function() {
+
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update ticket.',
+                            icon: 'error'
+                        });
+
+                    },
+
+                    complete: function() {
+
+                        $('#btnUpdateTicket').prop('disabled', false)
+                        .html(`
+                            <i class="bi bi-save me-1"></i>
+                            Update
+                        `);
+                    }
+                });
+
+            });
+        }
+
+        // Delete Ticket
+        function DeleteTicket(id, ticketNo) {
+
+            Swal.fire({
+                title: 'Delete Ticket?',
+                text: `Are you sure you want to delete ${ticketNo}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "Ticket")',
+                    type: 'POST',
+                    data: { id: id },
+
+                    success: function(response) {
+
+                        if (!response.success) {
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+
+                        ticketTable.ajax.reload(null, false);
+
+                        showSuccessToast(response.message);
+                    },
+
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to delete ticket.',
+                            icon: 'error'
+                        });
+                    }
+                });
+
+            });
+        }
+
+        function LoadTicketHistory(id) {
+            $('#ticketHistory').html(`
+                <div class="text-center text-secondary py-3">
+                    <div class="spinner-border spinner-border-sm me-1"></div>
+                    Loading history...
+                </div>
+            `);
+
+            $.ajax({
+                url: '@Url.Action("GetTicketHistory", "Ticket")',
+                type: 'GET',
+                data: {
+                    id: id
+                },
+                success: function (response) {
+
+                    if (!response.success) {
+                        $('#ticketHistory').html(`
+                            <div class="text-danger">
+                                ${response.message}
+                            </div>
+                        `);
+                        return;
+                    }
+
+                    RenderTicketHistory(response.data);
+                },
+                error: function () {
+                    $('#ticketHistory').html(`
+                        <div class="text-danger">
+                            Failed to load ticket history.
+                        </div>
+                    `);
+                }
+            });
+        }
+
+        function RenderTicketHistory(data) {
+
+            if (!data || data.length === 0) {
+
+                $('#ticketHistory').html(`
+                    <div class="text-secondary text-center py-3">
+                        <i class="bi bi-clock-history d-block fs-4 mb-1"></i>
+                        No history available.
+                    </div>
+                `);
+
+                return;
+            }
+
+            let html = '';
+
+            data.forEach(function(item) {
+
+                let icon = 'bi-clock-history';
+                let badge = 'text-bg-secondary';
+
+                switch ((item.action ?? '').toUpperCase()) {
+
+                    case 'CREATE':
+                        icon = 'bi-plus-circle';
+                        badge = 'text-bg-success';
+                        break;
+
+                    case 'UPDATE':
+                        icon = 'bi-pencil-square';
+                        badge = 'text-bg-primary';
+                        break;
+
+                    case 'DELETE':
+                        icon = 'bi-trash';
+                        badge = 'text-bg-danger';
+                        break;
+                }
+
+                html += `
+                    <div class="ticket-history-item">
+
+                        <div class="ticket-history-icon">
+                            <i class="bi ${icon}"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="mb-1">
+                                <span class="badge ${badge} me-1">
+                                    ${item.action}
+                                </span>
+                            </div>
+
+                            <div class="ticket-history-description fw-semibold">
+                                ${item.description}
+                            </div>
+
+                            <div class="ticket-history-meta text-secondary mt-1">
+
+                                <i class="bi bi-person me-1"></i>
+                                ${item.createdByName}
+
+                                <span class="mx-1">•</span>
+
+                                <i class="bi bi-calendar3 me-1"></i>
+                                ${item.createdAtText}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            });
+
+            $('#ticketHistory').html(html);
+        }
+    </script>
+}

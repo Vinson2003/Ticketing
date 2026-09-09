@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TicketingSystem.Data/TicketingSystem.Data.csproj" />
+  <Project Path="TicketingSystem.Helper/TicketingSystem.Helper.csproj" Id="af3fa03c-b684-4d9e-9c8e-72566bef2c04" />
+  <Project Path="TicketingSystem.Service/TicketingSystem.Service.csproj" />
+  <Project Path="TicketingSystem/TicketingSystem.csproj" />
+</Solution>

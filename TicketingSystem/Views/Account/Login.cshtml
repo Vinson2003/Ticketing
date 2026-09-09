@@ -1,0 +1,65 @@
+﻿@model TicketingSystem.Service.ServiceModel.LoginRequest
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+
+<div class="login-box">
+
+    <div class="login-logo">
+        <a href="#">
+            <b>Ticketing</b> System
+        </a>
+    </div>
+
+    <div class="card">
+
+        <div class="card-body login-card-body">
+
+            <p class="login-box-msg">
+                Sign in to start your session
+            </p>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-circle me-1"></i>
+                    @ViewBag.ErrorMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">
+                    </button>
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Login" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <!-- Username -->
+                <div class="input-group mb-3">
+                    <input asp-for="Username" class="form-control" placeholder="Username" autocomplete="username" />
+                    <div class="input-group-text">
+                        <span class="bi bi-person"></span>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group mb-3">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" autocomplete="current-password" />
+                    <div class="input-group-text">
+                        <span class="bi bi-lock"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>
+                    Sign In
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

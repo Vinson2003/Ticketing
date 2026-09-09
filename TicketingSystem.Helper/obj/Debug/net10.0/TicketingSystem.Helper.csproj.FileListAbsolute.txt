@@ -1,0 +1,12 @@
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\bin\Debug\net10.0\TicketingSystem.Helper.deps.json
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\bin\Debug\net10.0\TicketingSystem.Helper.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\bin\Debug\net10.0\TicketingSystem.Helper.pdb
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.GeneratedMSBuildEditorConfig.editorconfig
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.AssemblyInfoInputs.cache
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.AssemblyInfo.cs
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.csproj.CoreCompileInputs.cache
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\refint\TicketingSystem.Helper.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.pdb
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\ref\TicketingSystem.Helper.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\Ticketin.22E50A4B.Up2Date

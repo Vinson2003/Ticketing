@@ -1,0 +1,17 @@
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Service.deps.json
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Service.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Service.pdb
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Data.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Data.pdb
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.csproj.AssemblyReference.cache
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.AssemblyInfoInputs.cache
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.AssemblyInfo.cs
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.csproj.CoreCompileInputs.cache
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\Ticketin.4FCF4FDB.Up2Date
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\refint\TicketingSystem.Service.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\TicketingSystem.Service.pdb
+D:\MyProject\TicketingSystem\TicketingSystem.Service\obj\Debug\net10.0\ref\TicketingSystem.Service.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Helper.dll
+D:\MyProject\TicketingSystem\TicketingSystem.Service\bin\Debug\net10.0\TicketingSystem.Helper.pdb

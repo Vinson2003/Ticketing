@@ -1,0 +1,1 @@
+Scaffold-DbContext "Name=ConnectionStrings:DefaultConnection" Microsoft.EntityFrameworkCore.SqlServer -Context AppDbContext -ContextDir Context -OutputDir Entities -NoOnConfiguring -Force
