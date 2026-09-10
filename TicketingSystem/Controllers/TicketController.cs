@@ -27,9 +27,9 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
         return View();
     }
 
-    // POST: Ticket/GetTickets
+    // POST: Ticket/Read
     [HttpPost]
-    public JsonResult GetTickets(Datatable datatable, TicketFilter filters)
+    public JsonResult Read(Datatable datatable, TicketFilter filters)
     {
         Support.ProccessFilter(datatable, out var col, out var colIndex, out var sort);
 

@@ -1,0 +1,146 @@
+﻿<!-- Modal Create User -->
+<div class="modal fade" id="modalCreateUser" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-person-plus me-1"></i>
+                    Create User
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="formCreateUser">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+
+                        <input type="text" class="form-control" name="Username" maxlength="50" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Name </label>
+
+                        <input type="text" class="form-control" name="Name" maxlength="100" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+
+                        <input type="email" class="form-control" name="Email" maxlength="150" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+
+                        <input type="password" class="form-control" name="Password"
+                               minlength="6" autocomplete="new-password" required />
+                    </div>
+
+                    <div>
+                        <label class="form-label">Role</label>
+                        <select class="form-select" name="RoleId" asp-items="ViewBag.RoleList" required>
+                            <option value="">
+                                Select Role
+                            </option>
+                        </select>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnSaveUser">
+                    <i class="bi bi-save me-1"></i>
+                    Save
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal Edit User -->
+<div class="modal fade" id="modalEditUser" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-pencil-square me-1"></i>
+                    Edit User
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="formEditUser">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="editUserId" name="Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Username
+                        </label>
+                        <input type="text" id="editUsername" class="form-control" disabled />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+
+                        <input type="text" id="editName" name="Name" class="form-control"
+                               maxlength="100" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="editEmail" name="Email" class="form-control" maxlength="150" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">Role</label>
+                        <select id="editRoleId" name="RoleId" class="form-select" asp-items="ViewBag.RoleList" required>
+                            <option value="">Select Role</option>
+                        </select>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnUpdateUser">
+                    <i class="bi bi-save me-1"></i>
+                    Save Changes
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,7 +1,40 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\MyProject\\TicketingSystem\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem\\helper\\actionfilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|solutionrelative:ticketingsystem\\helper\\actionfilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem\\views\\user\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|solutionrelative:ticketingsystem\\views\\user\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|solutionrelative:ticketingsystem\\controllers\\ticketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFEF8C48-5D4E-469B-2BA9-25D441465BD4}|TicketingSystem.Service\\TicketingSystem.Service.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem.service\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFEF8C48-5D4E-469B-2BA9-25D441465BD4}|TicketingSystem.Service\\TicketingSystem.Service.csproj|solutionrelative:ticketingsystem.service\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFEF8C48-5D4E-469B-2BA9-25D441465BD4}|TicketingSystem.Service\\TicketingSystem.Service.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem.service\\services\\ticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFEF8C48-5D4E-469B-2BA9-25D441465BD4}|TicketingSystem.Service\\TicketingSystem.Service.csproj|solutionrelative:ticketingsystem.service\\services\\ticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|solutionrelative:ticketingsystem\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem\\views\\ticket\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C5DEC6B3-5690-EC2F-11E3-0C1EDCA835D0}|TicketingSystem\\TicketingSystem.csproj|solutionrelative:ticketingsystem\\views\\ticket\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AFEF8C48-5D4E-469B-2BA9-25D441465BD4}|TicketingSystem.Service\\TicketingSystem.Service.csproj|d:\\myproject\\ticketingsystem\\ticketingsystem.service\\interfaces\\iticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AFEF8C48-5D4E-469B-2BA9-25D441465BD4}|TicketingSystem.Service\\TicketingSystem.Service.csproj|solutionrelative:ticketingsystem.service\\interfaces\\iticketservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +55,103 @@
             {
               "$type": "Bookmark",
               "Name": "ST:17:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ActionFilter.cs",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Helper\\ActionFilter.cs",
+              "RelativeDocumentMoniker": "TicketingSystem\\Helper\\ActionFilter.cs",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Helper\\ActionFilter.cs",
+              "RelativeToolTip": "TicketingSystem\\Helper\\ActionFilter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T07:39:46.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Views\\Ticket\\Index.cshtml",
+              "RelativeDocumentMoniker": "TicketingSystem\\Views\\Ticket\\Index.cshtml",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Views\\Ticket\\Index.cshtml",
+              "RelativeToolTip": "TicketingSystem\\Views\\Ticket\\Index.cshtml",
+              "ViewState": "AgIAAKUAAAAAAAAAAAAAALwAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-10T07:38:16.726Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Views\\User\\Index.cshtml",
+              "RelativeDocumentMoniker": "TicketingSystem\\Views\\User\\Index.cshtml",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Views\\User\\Index.cshtml",
+              "RelativeToolTip": "TicketingSystem\\Views\\User\\Index.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAAHQAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-10T07:38:08.618Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TicketService.cs",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem.Service\\Services\\TicketService.cs",
+              "RelativeDocumentMoniker": "TicketingSystem.Service\\Services\\TicketService.cs",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem.Service\\Services\\TicketService.cs",
+              "RelativeToolTip": "TicketingSystem.Service\\Services\\TicketService.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAwwDoAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T07:37:24.243Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ITicketService.cs",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem.Service\\Interfaces\\ITicketService.cs",
+              "RelativeDocumentMoniker": "TicketingSystem.Service\\Interfaces\\ITicketService.cs",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem.Service\\Interfaces\\ITicketService.cs",
+              "RelativeToolTip": "TicketingSystem.Service\\Interfaces\\ITicketService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T07:37:17.904Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "TicketingSystem\\Controllers\\UserController.cs",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Controllers\\UserController.cs",
+              "RelativeToolTip": "TicketingSystem\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T07:35:03.223Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TicketController.cs",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Controllers\\TicketController.cs",
+              "RelativeDocumentMoniker": "TicketingSystem\\Controllers\\TicketController.cs",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem\\Controllers\\TicketController.cs",
+              "RelativeToolTip": "TicketingSystem\\Controllers\\TicketController.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAwwMkAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T07:34:55.986Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "D:\\MyProject\\TicketingSystem\\TicketingSystem.Service\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "TicketingSystem.Service\\Services\\UserService.cs",
+              "ToolTip": "D:\\MyProject\\TicketingSystem\\TicketingSystem.Service\\Services\\UserService.cs",
+              "RelativeToolTip": "TicketingSystem.Service\\Services\\UserService.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAwwGYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T07:34:04.241Z"
             }
           ]
         }

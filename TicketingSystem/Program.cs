@@ -73,6 +73,7 @@ void ConfigureService(IServiceCollection services, IConfiguration configuration)
     services.AddScoped<IAuthService, AuthService>();
     services.AddScoped<IPermissionService, PermissionService>();
     services.AddScoped<ITicketHistoryService, TicketHistoryService>();
+    services.AddScoped<IUserService, UserService>();
 
     // Add memory cache
     services.AddMemoryCache();

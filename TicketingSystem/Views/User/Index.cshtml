@@ -1,0 +1,495 @@
+﻿@using TicketingSystem.Helper
+@{
+    ViewData["Title"] = "User Management";
+
+    bool permsCreate = PermissionHelper.CheckPerms(User, ViewBag.Perms, "user-create");
+    bool permsDetails = PermissionHelper.CheckPerms(User, ViewBag.Perms, "user-details");
+    bool permsUpdate = PermissionHelper.CheckPerms(User, ViewBag.Perms, "user-update");
+    bool permsToggleActive = PermissionHelper.CheckPerms(User, ViewBag.Perms, "user-toggleactive");
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h3 class="card-title mb-0">
+                <i class="bi bi-people me-1"></i>
+                User Management
+            </h3>
+
+            @if(permsCreate)
+            {
+                <button type="button" class="btn btn-primary btn-sm" id="btnCreateUser">
+                    <i class="bi bi-plus-circle me-1"></i>
+                    Create User
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label">
+                    Search
+                </label>
+
+                <input type="text" id="filterSearch" class="form-control" placeholder="Username, name, email..." />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    Role
+                </label>
+
+                <select id="filterRole" class="form-select" asp-items="ViewBag.RoleList">
+                    <option value="">
+                        All Roles
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    Status
+                </label>
+
+                <select id="filterStatus" class="form-select">
+                    <option value="">All Status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+
+                <button type="button" class="btn btn-secondary w-100" id="btnResetFilter">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>
+                    Reset
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="table-responsive">
+            <table id="tableUser" class="table table-bordered table-hover w-100">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@if (permsUpdate || permsDetails)
+{
+    @await Html.PartialAsync("_ModalUser")
+}
+
+@section Scripts {
+
+    <script>
+
+        const permsUpdate = @permsUpdate.ToString().ToLower();
+        const permsToggleActive = @permsToggleActive.ToString().ToLower();
+
+        var userTable;
+        $(document).ready(function () {
+            userTable = $('#tableUser').DataTable({
+                responsive: true,
+                searching: false,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '@Url.Action("Read", "User")',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: function (d) {
+                        d.Search = $('#filterSearch').val();
+                        d.RoleId = $('#filterRole').val();
+                        d.IsActive = $('#filterStatus').val();
+                    }
+                },
+                columns: [
+                    { data: 'username', name: 'username' },
+                    { data: 'name', name: 'name' },
+                    { data: 'email', name: 'email',
+                        render: function (data) {
+                            return data ?? '-';
+                        }
+                    },
+                    { data: 'roleName', name: 'rolename' },
+                    { data: 'isActive', name: 'isactive',
+                        render: function (data) {
+                            if (data) {
+                                return `
+                                    <span class="badge text-bg-success">
+                                        Active
+                                    </span>
+                                `;
+                            }
+                            return `
+                                <span class="badge text-bg-secondary">
+                                    Inactive
+                                </span>
+                            `;
+                        }
+                    },
+                    { data: 'createdAtText', name: 'createdattext' },
+                    { data: 'id', orderable: false, searchable: false,
+                        render: function (data, type, row) {
+
+                            let buttons = '';
+
+                            if(permsUpdate) {
+
+                                buttons += `
+                                    <button type="button"
+                                            class="btn btn-sm btn-warning me-1"
+                                            onclick="EditUser(${row.id})"
+                                            title="Edit">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </button>
+                                `;
+                            }
+
+                            if(permsToggleActive) {
+
+                                if (row.isActive) {
+
+                                    buttons += `
+                                        <button type="button"
+                                                class="btn btn-sm btn-danger"
+                                                onclick="ToggleActiveUser(${row.id}, true)"
+                                                title="Deactivate">
+
+                                            <i class="bi bi-person-x"></i>
+
+                                        </button>
+                                    `;
+
+                                } 
+                                else {
+
+                                    buttons += `
+                                        <button type="button"
+                                                class="btn btn-sm btn-success"
+                                                onclick="ToggleActiveUser(${row.id}, false)"
+                                                title="Activate">
+
+                                            <i class="bi bi-person-check"></i>
+
+                                        </button>
+                                    `;
+                                }
+                            }
+
+                            return buttons || '-';
+                        }
+                    }
+                ],
+                order: [],
+            });
+
+            $('#filterRole, #filterStatus').on('change', function () {
+                userTable.ajax.reload();
+            });
+
+            $('#filterSearch').on('keyup', function (e) {
+                if (e.key === 'Enter') {
+                    userTable.ajax.reload();
+                }
+            });
+
+            $('#btnResetFilter').on('click', function () {
+                $('#filterSearch').val('');
+                $('#filterRole').val('');
+                $('#filterStatus').val('');
+                userTable.ajax.reload();
+            });
+
+        });
+
+        function EditUser(id) {
+            console.log('Edit User:', id);
+        }
+
+    </script>
+
+
+    <script>
+        $('#btnCreateUser').on('click', function () {
+
+            $('#formCreateUser')[0].reset();
+
+            var modal = bootstrap.Modal.getOrCreateInstance(
+                document.getElementById('modalCreateUser')
+            );
+
+            modal.show();
+        });
+
+        $('#btnSaveUser').on('click', function () {
+
+            var form = document.getElementById('formCreateUser');
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            Swal.fire({
+                title: 'Create User?',
+                text: 'Are you sure you want to create this user?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, create',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $('#btnSaveUser').prop('disabled', true)
+                .html(`
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    Saving...
+                `);
+
+                $.ajax({
+                    url: '@Url.Action("Create", "User")',
+                    type: 'POST',
+                    data: $('#formCreateUser').serialize(),
+
+                    success: function (response) {
+
+                        if (!response.success) {
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('modalCreateUser'));
+
+                        modal.hide();
+
+                        $('#formCreateUser')[0].reset();
+
+                        userTable.ajax.reload(null, false);
+
+                        showSuccessToast(response.message);
+                    },
+
+                    error: function () {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to create user.',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function () {
+                        $('#btnSaveUser').prop('disabled', false)
+                        .html(`
+                            <i class="bi bi-save me-1"></i>
+                            Save
+                        `);
+                    }
+                });
+
+            });
+        });
+
+        function EditUser(id) {
+
+            $.ajax({
+                url: '@Url.Action("Details", "User")',
+                type: 'GET',
+                data: { id: id },
+
+                success: function (response) {
+
+                    if (!response.success) {
+                        Swal.fire({
+                            title: 'Failed',
+                            text: response.message,
+                            icon: 'error'
+                        });
+                        return;
+                    }
+
+                    var data = response.data;
+
+                    $('#editUserId').val(data.id);
+                    $('#editUsername').val(data.username);
+                    $('#editName').val(data.name);
+                    $('#editEmail').val(data.email ?? '');
+                    $('#editRoleId').val(data.roleId);
+
+                    var modal = bootstrap.Modal.getOrCreateInstance(
+                        document.getElementById('modalEditUser')
+                    );
+
+                    modal.show();
+                },
+
+                error: function () {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to retrieve user.',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+
+        $('#btnUpdateUser').on('click', function () {
+
+            var form = document.getElementById('formEditUser');
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            Swal.fire({
+                title: 'Update User?',
+                text: 'Are you sure you want to update this user?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, update',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $('#btnUpdateUser').prop('disabled', true)
+                .html(`
+                    <span class="spinner-border
+                                    spinner-border-sm
+                                    me-1">
+                    </span>
+                    Saving...
+                `);
+
+                $.ajax({
+                    url: '@Url.Action("Update", "User")',
+                    type: 'POST',
+
+                    data: $('#formEditUser').serialize(),
+
+                    success: function (response) {
+
+                        if (!response.success) {
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+
+                        var modal = bootstrap.Modal.getInstance(
+                            document.getElementById('modalEditUser')
+                        );
+
+                        modal.hide();
+
+                        userTable.ajax.reload(null, false);
+
+                        showSuccessToast(response.message);
+                    },
+
+                    error: function () {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update user.',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function () {
+                        $('#btnUpdateUser').prop('disabled', false)
+                        .html(`
+                            <i class="bi bi-save me-1"></i>
+                            Save Changes
+                        `);
+                    }
+                });
+            });
+        });
+
+        function ToggleActiveUser(id, isActive) {
+
+            let actionText = isActive ? 'Deactivate' : 'Activate';
+
+            let messageText = isActive
+                ? 'Are you sure you want to deactivate this user?'
+                : 'Are you sure you want to activate this user?';
+
+            Swal.fire({
+                title: actionText + ' User?',
+                text: messageText,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, ' + actionText.toLowerCase(),
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("ToggleActive", "User")',
+                    type: 'POST',
+                    data: { id: id },
+
+                    success: function (response) {
+
+                        if (!response.success) {
+                            Swal.fire({
+                                title: 'Failed',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                            return;
+                        }
+
+                        userTable.ajax.reload(null, false);
+
+                        showSuccessToast(response.message);
+                    },
+
+                    error: function () {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update user status.',
+                            icon: 'error'
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+}

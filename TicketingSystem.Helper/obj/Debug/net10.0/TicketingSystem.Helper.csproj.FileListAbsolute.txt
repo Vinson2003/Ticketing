@@ -5,6 +5,7 @@ D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingS
 D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.AssemblyInfoInputs.cache
 D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.AssemblyInfo.cs
 D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.csproj.CoreCompileInputs.cache
+D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.sourcelink.json
 D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.dll
 D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\refint\TicketingSystem.Helper.dll
 D:\MyProject\TicketingSystem\TicketingSystem.Helper\obj\Debug\net10.0\TicketingSystem.Helper.pdb

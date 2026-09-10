@@ -1,6 +1,7 @@
 ﻿@using TicketingSystem.Helper
 @{
-    bool ticketPage = PermissionHelper.CheckPerms(User, ViewBag.Perms, "ticket-page");
+    bool ticketPage = PermissionHelper.CheckPerms(User, ViewBag.Perms, "ticket-index");
+    bool userPage = PermissionHelper.CheckPerms(User, ViewBag.Perms, "user-index");
 }
 
 <!DOCTYPE html>
@@ -111,6 +112,16 @@
                                 <a asp-controller="Ticket" asp-action="Index" class="nav-link">
                                     <i class="nav-icon bi bi-ticket-perforated"></i>
                                     <p>Tickets</p>
+                                </a>
+                            </li>
+                        }
+
+                        @if(userPage)
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="User" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon bi bi-people"></i>
+                                    <p>Users</p>
                                 </a>
                             </li>
                         }

@@ -44,15 +44,12 @@ public class ActionFilter : IAsyncActionFilter
 
         var excludedControllers = new List<string>
         {
-            "account",
-            "home",
-            "permission"
+            "account", "home", "permission"
         };
 
         var excludedActions = new List<string>
         {
-            "ticket-gettickets",
-            "ticket-gettickethistory"
+            "ticket-gettickethistory",
         };
 
         if (excludedControllers.Contains(controllerName) || excludedActions.Contains(requiredPermission))

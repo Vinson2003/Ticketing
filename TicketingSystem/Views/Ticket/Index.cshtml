@@ -152,7 +152,7 @@
 
 @if(permsCreate || permsDetails || permsUpdate)
 {
-    @await Html.PartialAsync("_Modal")
+    @await Html.PartialAsync("_ModalTicket")
 }
 
 @section Scripts
@@ -182,7 +182,7 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '@Url.Action("GetTickets", "Ticket")',
+                        url: '@Url.Action("Read", "Ticket")',
                         type: 'POST',
                         dataType: 'JSON',
                         data: function(d) {
@@ -209,7 +209,7 @@
                             }
                         },
                         { data: 'createdAtText' },
-                        { data: 'id', orderable: false, searchable: false,
+                        { data: 'id', 
                             render: function(data, type, row) {
 
                                 let buttons = '';
