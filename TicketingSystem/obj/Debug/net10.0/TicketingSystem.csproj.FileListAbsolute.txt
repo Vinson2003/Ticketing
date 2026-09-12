@@ -209,9 +209,7 @@ D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\vuqvgu
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\m9jd4ro3tp-{0}-t0v70gx5co-t0v70gx5co.gz
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\f0befvlpt5-{0}-ig8fpk8ha3-ig8fpk8ha3.gz
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\9tym9v9u0n-{0}-slbdmv3bvs-slbdmv3bvs.gz
-D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\m0ohnhxt5y-{0}-ufb77prswq-ufb77prswq.gz
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\y7ywr89lsz-{0}-61n19gt1b8-61n19gt1b8.gz
-D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\g8qechgc1u-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\wctt5clnhr-{0}-bqjiyaj88i-bqjiyaj88i.gz
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\rehewhqfn3-{0}-c2jlpeoesf-c2jlpeoesf.gz
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\06nrk4wnov-{0}-erw9l3u2r3-erw9l3u2r3.gz
@@ -285,3 +283,6 @@ D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\refint\TicketingS
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\TicketingSystem.pdb
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\TicketingSystem.genruntimeconfig.cache
 D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\ref\TicketingSystem.dll
+D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\m0ohnhxt5y-{0}-c4iibygae7-c4iibygae7.gz
+D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\bcs3qcygvc-{0}-x3g6gdptur-x3g6gdptur.gz
+D:\MyProject\TicketingSystem\TicketingSystem\obj\Debug\net10.0\compressed\g8qechgc1u-{0}-cqdkns4146-cqdkns4146.gz

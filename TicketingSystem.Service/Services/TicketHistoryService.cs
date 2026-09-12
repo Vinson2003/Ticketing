@@ -4,9 +4,10 @@ using TicketingSystem.Data.Entities;
 using TicketingSystem.Service.Interfaces;
 using TicketingSystem.Service.ServiceModel;
 
-public class TicketHistoryService(AppDbContext context) : ITicketHistoryService
+public class TicketHistoryService(AppDbContext context, ITicketAccessService ticketAccessService) : ITicketHistoryService
 {
     private readonly AppDbContext _context = context;
+    private readonly ITicketAccessService _ticketAccessService = ticketAccessService;
 
     public void AddHistory(int ticketId, string action, string description, int createdBy, DateTime createdAt)
     {
@@ -69,9 +70,24 @@ public class TicketHistoryService(AppDbContext context) : ITicketHistoryService
         return changes;
     }
 
-    public List<TicketHistoryResponse> GetTicketHistory(int ticketId)
+    public List<TicketHistoryResponse> GetTicketHistory(int ticketId, int userId, string roleCode)
     {
-        var data = _context.TrTicketHistories.AsNoTracking()
+        var ticketQuery = _context.TrTickets.AsNoTracking()
+            .Where(i =>
+                i.Id == ticketId && !i.IsDeleted
+            );
+
+        ticketQuery = _ticketAccessService.ApplyScope(ticketQuery, userId, roleCode);
+
+        var ticketAccessible = ticketQuery.Any();
+
+        if (!ticketAccessible)
+        {
+            return null;
+        }
+
+        var data = _context.TrTicketHistories
+            .AsNoTracking()
             .Where(i => i.TicketId == ticketId)
             .OrderByDescending(i => i.CreatedAt)
             .Select(i => new TicketHistoryResponse
@@ -84,7 +100,9 @@ public class TicketHistoryService(AppDbContext context) : ITicketHistoryService
             })
             .ToList();
 
-        var jakartaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+        var jakartaTimeZone = TimeZoneInfo.FindSystemTimeZoneById(
+            "SE Asia Standard Time"
+        );
 
         data.ForEach(i =>
         {

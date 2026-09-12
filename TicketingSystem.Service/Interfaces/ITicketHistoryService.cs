@@ -12,6 +12,6 @@ namespace TicketingSystem.Service.Interfaces
 
         List<string> GetChanges(TicketChangeSnapshot oldData, TicketChangeSnapshot newData);
 
-        List<TicketHistoryResponse> GetTicketHistory(int ticketId);
+        List<TicketHistoryResponse> GetTicketHistory(int ticketId, int userId, string roleCode);
     }
 }

@@ -1,21 +1,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using TicketingSystem.Models;
+using TicketingSystem.Helper;
+using TicketingSystem.Service.Interfaces;
 
-namespace TicketingSystem.Controllers
+namespace TicketingSystem.Controllers;
+
+[Authorize]
+public class HomeController(IDashboardService dashboardService) : Controller
 {
-    [Authorize]
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
+    private readonly IDashboardService _dashboardService = dashboardService;
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+    public IActionResult Index()
+    {
+        var dashboard = _dashboardService.GetDashboard(User.Id(), User.RoleCode());
+
+        return View(dashboard);
     }
 }

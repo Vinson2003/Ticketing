@@ -1,8 +1,357 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model TicketingSystem.Service.ServiceModel.DashboardResponse
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-sm-6 col-xl">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+
+                <div>
+                    <div class="text-secondary small mb-1">
+                        Total Tickets
+                    </div>
+
+                    <h3 class="mb-0">
+                        @Model.TotalTickets
+                    </h3>
+                </div>
+
+                <div class="fs-2 text-primary">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-xl">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+
+                <div>
+                    <div class="text-secondary small mb-1">
+                        Open
+                    </div>
+
+                    <h3 class="mb-0">
+                        @Model.OpenTickets
+                    </h3>
+                </div>
+
+                <div class="fs-2 text-primary">
+                    <i class="bi bi-folder2-open"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-xl">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+
+                <div>
+                    <div class="text-secondary small mb-1">
+                        In Progress
+                    </div>
+
+                    <h3 class="mb-0">
+                        @Model.InProgressTickets
+                    </h3>
+                </div>
+
+                <div class="fs-2 text-warning">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-xl">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+
+                <div>
+                    <div class="text-secondary small mb-1">
+                        Resolved
+                    </div>
+
+                    <h3 class="mb-0">
+                        @Model.ResolvedTickets
+                    </h3>
+                </div>
+
+                <div class="fs-2 text-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-xl">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+
+                <div>
+                    <div class="text-secondary small mb-1">
+                        Closed
+                    </div>
+
+                    <h3 class="mb-0">
+                        @Model.ClosedTickets
+                    </h3>
+                </div>
+
+                <div class="fs-2 text-secondary">
+                    <i class="bi bi-archive"></i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-lg-6">
+
+        <div class="card h-100">
+
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i class="bi bi-pie-chart me-1"></i>
+                    Tickets by Status
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="dashboard-chart">
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-12 col-lg-6">
+
+        <div class="card h-100">
+
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i class="bi bi-bar-chart me-1"></i>
+                    Tickets by Priority
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="dashboard-chart">
+                    <canvas id="priorityChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="card-title mb-0">
+            <i class="bi bi-clock-history me-1"></i>
+            Recent Tickets
+        </h3>
+    </div>
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Ticket No</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created By</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model.RecentTickets == null || Model.RecentTickets.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-secondary py-4">
+                                No recent tickets.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var ticket in Model.RecentTickets)
+                        {
+                            <tr>
+
+                                <td class="fw-semibold">@ticket.TicketNo</td>
+                                <td>@ticket.Title</td>
+
+                                <td>
+                                    @switch (ticket.StatusName.ToLower())
+                                    {
+                                        case "open":
+
+                                            <span class="badge text-bg-primary">
+                                                @ticket.StatusName
+                                            </span>
+
+                                        break;
+
+                                        case "in progress":
+
+                                            <span class="badge text-bg-warning">
+                                                @ticket.StatusName
+                                            </span>
+
+                                        break;
+
+                                        case "resolved":
+
+                                            <span class="badge text-bg-success">
+                                                @ticket.StatusName
+                                            </span>
+
+                                        break;
+
+                                        default:
+
+                                            <span class="badge text-bg-secondary">
+                                                @ticket.StatusName
+                                            </span>
+
+                                        break;
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @switch (ticket.PriorityName.ToLower())
+                                    {
+                                        case "low":
+
+                                            <span class="badge text-bg-success">
+                                                @ticket.PriorityName
+                                            </span>
+
+                                        break;
+
+                                        case "medium":
+
+                                            <span class="badge text-bg-warning">
+                                                @ticket.PriorityName
+                                            </span>
+
+                                        break;
+
+                                        case "high":
+
+                                            <span class="badge text-bg-danger">
+                                                @ticket.PriorityName
+                                            </span>
+
+                                        break;
+
+                                        case "critical":
+
+                                            <span class="badge text-bg-danger">
+                                                @ticket.PriorityName
+                                            </span>
+
+                                        break;
+
+                                        default:
+
+                                            <span class="badge text-bg-secondary">
+                                                @ticket.PriorityName
+                                            </span>
+
+                                        break;
+                                    }
+
+                                </td>
+
+                                <td>@ticket.CreatedByName</td>
+
+                                <td>@ticket.CreatedAtText</td>
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        window.dashboardData = {
+            statusLabels: @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(
+                        Model.TicketsByStatus.Select(i => i.Label)
+                )
+            ),
+
+            statusData: @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(
+                        Model.TicketsByStatus.Select(i => i.Total)
+                )
+            ),
+
+            priorityLabels: @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(
+                        Model.TicketsByPriority.Select(i => i.Label)
+                )
+            ),
+
+            priorityData: @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(
+                        Model.TicketsByPriority.Select(i => i.Total)
+                )
+            )
+        }
+    </script>
+
+    <script src="~/js/dashboard.js"></script>
+}

@@ -5,13 +5,16 @@ using TicketingSystem.Data.Entities;
 using TicketingSystem.Helper;
 using TicketingSystem.Service.Interfaces;
 using TicketingSystem.Service.ServiceModel;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TicketingSystem.Service.Services;
 
-public class TicketService(AppDbContext context, ITicketHistoryService ticketHistoryService) : ITicketService
+public class TicketService(AppDbContext context, ITicketHistoryService ticketHistoryService, 
+    ITicketAccessService ticketAccessService) : ITicketService
 {
     private readonly AppDbContext _context = context;
     private readonly ITicketHistoryService _ticketHistoryService = ticketHistoryService;
+    private readonly ITicketAccessService _ticketAccessService = ticketAccessService;
 
     // GET: Ticket/Dropdowns
     public TicketDropdownResponse GetDropdowns()
@@ -56,11 +59,16 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
         };
     }
 
-    public BaseResponse<List<ResponseListTicket>> GetTickets(BasePaging paging, TicketFilter filter)
+    public BaseResponse<List<ResponseListTicket>> GetTickets(BasePaging paging, TicketFilter filter, int userId, string roleCode)
     {
         var response = new BaseResponse<List<ResponseListTicket>>();
 
-        var query = _context.TrTickets.AsNoTracking().Where(i => !i.IsDeleted);
+        var query = _context.TrTickets.AsNoTracking()
+            .Where(i => !i.IsDeleted);
+
+        query = _ticketAccessService.ApplyScope(query, userId, roleCode);
+
+        var total = query.Count();
 
         // Search
         if (!string.IsNullOrWhiteSpace(filter.Search))
@@ -149,45 +157,50 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
 
         response.Result = data;
         response.TotalFiltered = totalFiltered;
-        response.Total = _context.TrTickets.AsNoTracking().Count(i => !i.IsDeleted);
+        response.Total = total;
 
         return response;
     }
 
-    public BaseResponse<DetailTicket> GetDetails(int id)
+    public BaseResponse<DetailTicket> GetDetails(int id, int userId, string roleCode)
     {
         var response = new BaseResponse<DetailTicket>();
 
-        var detail = _context.TrTickets.AsNoTracking().Where(i => i.Id == id && !i.IsDeleted)
-            .Select(i => new DetailTicket
-            {
-                Id = i.Id,
-                TicketNo = i.TicketNo,
-                Title = i.Title,
-                Description = i.Description,
+        var query = _context.TrTickets.AsNoTracking()
+            .Where(i => i.Id == id && !i.IsDeleted);
 
-                CategoryId = i.CategoryId,
-                CategoryName = i.Category.Name,
+        query = _ticketAccessService.ApplyScope(query, userId, roleCode);
 
-                PriorityId = i.PriorityId,
-                PriorityName = i.Priority.Name,
+        var detail = query.Select(i => new DetailTicket
+        {
+            Id = i.Id,
+            TicketNo = i.TicketNo,
+            Title = i.Title,
+            Description = i.Description,
 
-                StatusId = i.StatusId,
-                StatusName = i.Status.Name,
+            CategoryId = i.CategoryId,
+            CategoryName = i.Category.Name,
 
-                CreatedBy = i.CreatedBy,
-                CreatedByName = i.CreatedByNavigation.Name,
+            PriorityId = i.PriorityId,
+            PriorityName = i.Priority.Name,
 
-                AssignedTo = i.AssignedTo,
-                AssignedToName = i.AssignedToNavigation != null ? i.AssignedToNavigation.Name : null,
+            StatusId = i.StatusId,
+            StatusName = i.Status.Name,
 
-                CreatedAt = i.CreatedAt
-            })
-            .FirstOrDefault();
+            CreatedBy = i.CreatedBy,
+            CreatedByName = i.CreatedByNavigation.Name,
+
+            AssignedTo = i.AssignedTo,
+
+            AssignedToName = i.AssignedToNavigation != null ? i.AssignedToNavigation.Name : null,
+
+            CreatedAt = i.CreatedAt
+        })
+        .FirstOrDefault();
 
         if (detail == null)
         {
-            response.Message = "Ticket not found.";
+            response.Message = "Ticket not found or access denied.";
             return response;
         }
 
@@ -206,12 +219,15 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
         return response;
     }
 
-    public BaseResponse<bool> CreateTicket(CreateTicketRequest request, int createdBy)
+    public BaseResponse<bool> CreateTicket(CreateTicketRequest request, int createdBy, string roleCode)
     {
         var response = new BaseResponse<bool>();
 
-        var categoryExist = _context.MtTicketCategories.AsNoTracking()
+        // validasi category
+        var categoryExist = _context.MtTicketCategories
+            .AsNoTracking()
             .Any(i => i.Id == request.CategoryId && i.IsActive);
+
         if (!categoryExist)
         {
             response.Result = false;
@@ -219,8 +235,11 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
             return response;
         }
 
-        var priorityExist = _context.MtTicketPriorities.AsNoTracking()
+        // validasi priority
+        var priorityExist = _context.MtTicketPriorities
+            .AsNoTracking()
             .Any(i => i.Id == request.PriorityId);
+
         if (!priorityExist)
         {
             response.Result = false;
@@ -228,10 +247,43 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
             return response;
         }
 
-        if (request.AssignedTo.HasValue)
+        int? assignedTo = request.AssignedTo;
+
+        switch (roleCode.ToUpper())
+        {
+            case Const.ROLE_ADMIN:
+            break;
+
+            case Const.ROLE_DEVELOPER:
+            case Const.ROLE_SUPPORT:
+
+                if (assignedTo.HasValue &&
+                    assignedTo.Value != createdBy)
+                {
+                    response.Result = false;
+                    response.Message = "You can only assign the ticket to yourself.";
+                    return response;
+                }
+
+            break;
+
+            case Const.ROLE_USER:
+                assignedTo = null;
+            break;
+
+            default:
+
+                response.Result = false;
+                response.Message = "You are not allowed to create tickets.";
+            return response;
+        }
+
+        // kalau AssignedTo ada, pastikan user valid
+        if (assignedTo.HasValue)
         {
             var userExist = _context.MtUsers.AsNoTracking()
-                .Any(i => i.Id == request.AssignedTo.Value && i.IsActive);
+                .Any(i => i.Id == assignedTo.Value && i.IsActive);
+
             if (!userExist)
             {
                 response.Result = false;
@@ -240,30 +292,30 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
             }
         }
 
+        var now = DateTime.UtcNow;
+
         var entity = new TrTicket
         {
-            TicketNo = $"TCK-{DateTime.UtcNow:yyyyMMddHHmmssfff}",
+            TicketNo = $"TCK-{now:yyyyMMddHHmmssfff}",
+
             Title = request.Title,
             Description = request.Description,
+
             CategoryId = request.CategoryId,
             PriorityId = request.PriorityId,
+
             StatusId = Const.TICKET_STATUS_OPEN,
+
             CreatedBy = createdBy,
-            AssignedTo = request.AssignedTo,
-            CreatedAt = DateTime.UtcNow
+            AssignedTo = assignedTo,
+
+            CreatedAt = now
         };
 
         _context.TrTickets.Add(entity);
-
         _context.SaveChanges();
 
-        _ticketHistoryService.AddHistory(
-            entity.Id,
-            "CREATE",
-            "Ticket created.",
-            createdBy,
-            DateTime.UtcNow
-        );
+        _ticketHistoryService.AddHistory(entity.Id, "CREATE", "Ticket created.", createdBy, now);
 
         _context.SaveChanges();
 
@@ -273,25 +325,30 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
         return response;
     }
 
-    public BaseResponse<bool> UpdateTicket(UpdateTicketRequest request, int updatedBy)
+    public BaseResponse<bool> UpdateTicket(UpdateTicketRequest request, int updatedBy, string roleCode)
     {
         var response = new BaseResponse<bool>();
 
-        var entity = _context.TrTickets.Include(i => i.Category)
+        var query = _context.TrTickets
+            .Include(i => i.Category)
             .Include(i => i.Priority)
             .Include(i => i.Status)
             .Include(i => i.AssignedToNavigation)
-            .FirstOrDefault(i => i.Id == request.Id && !i.IsDeleted);
+            .Where(i => !i.IsDeleted);
 
+        query = _ticketAccessService.ApplyScope(query, updatedBy, roleCode);
+
+        var entity = query.FirstOrDefault(i => i.Id == request.Id);
         if (entity == null)
         {
             response.Result = false;
-            response.Message = "Ticket not found.";
+            response.Message = "Ticket not found or access denied.";
             return response;
         }
 
         // Category
-        var category = _context.MtTicketCategories.AsNoTracking()
+        var category = _context.MtTicketCategories
+            .AsNoTracking()
             .FirstOrDefault(i => i.Id == request.CategoryId && i.IsActive);
         if (category == null)
         {
@@ -399,28 +456,37 @@ public class TicketService(AppDbContext context, ITicketHistoryService ticketHis
         return response;
     }
 
-    public BaseResponse<bool> DeleteTicket(int id, int deletedBy)
+    public BaseResponse<bool> DeleteTicket(int id, int deletedBy,string roleCode)
     {
         var response = new BaseResponse<bool>();
 
-        var entity = _context.TrTickets
-            .FirstOrDefault(i =>i.Id == id && !i.IsDeleted);
+        var query = _context.TrTickets.Where(i => !i.IsDeleted);
+
+        query = _ticketAccessService.ApplyScope(query, deletedBy, roleCode);
+
+        var entity = query.FirstOrDefault(
+            i => i.Id == id
+        );
+
         if (entity == null)
         {
             response.Result = false;
-            response.Message = "Ticket not found.";
+            response.Message = "Ticket not found or access denied.";
+
             return response;
         }
 
+        var now = DateTime.UtcNow;
+
         entity.IsDeleted = true;
-        entity.UpdatedAt = DateTime.UtcNow;
+        entity.UpdatedAt = now;
 
         _ticketHistoryService.AddHistory(
             entity.Id,
             "DELETE",
             "Ticket deleted.",
             deletedBy,
-            DateTime.UtcNow
+            now
         );
 
         _context.SaveChanges();

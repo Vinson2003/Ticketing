@@ -13,7 +13,7 @@ namespace TicketingSystem.Service.Interfaces
 
         BaseResponse<bool> CreateUser(CreateUserRequest request);
 
-        BaseResponse<bool> UpdateUser(UpdateUserRequest request);
+        BaseResponse<bool> UpdateUser(UpdateUserRequest request, int currentUserId);
 
         BaseResponse<bool> ToggleActive(int id, int currentUserId);
 

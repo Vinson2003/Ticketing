@@ -216,7 +216,7 @@ public class UserService(AppDbContext context) : IUserService
         return response;
     }
 
-    public BaseResponse<bool> UpdateUser(UpdateUserRequest request)
+    public BaseResponse<bool> UpdateUser(UpdateUserRequest request, int currentUserId)
     {
         var response = new BaseResponse<bool>();
 
@@ -228,7 +228,15 @@ public class UserService(AppDbContext context) : IUserService
             return response;
         }
 
-        var roleExist = _context.MtRoles.AsNoTracking().Any(i => i.Id == request.RoleId);
+        if (entity.Id == currentUserId && entity.RoleId != request.RoleId)
+        {
+            response.Result = false;
+            response.Message = "You cannot change your own role.";
+            return response;
+        }
+
+        var roleExist = _context.MtRoles.AsNoTracking()
+            .Any(i => i.Id == request.RoleId);
         if (!roleExist)
         {
             response.Result = false;
@@ -240,10 +248,10 @@ public class UserService(AppDbContext context) : IUserService
         if (email != null)
         {
             var emailExist = _context.MtUsers.AsNoTracking()
-                .Any(i =>
-                    i.Email == email &&
-                    i.Id != request.Id
-                );
+            .Any(i =>
+                i.Email == email &&
+                i.Id != request.Id
+            );
             if (emailExist)
             {
                 response.Result = false;

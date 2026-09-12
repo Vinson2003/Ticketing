@@ -124,7 +124,7 @@ public class UserController(IUserService userService) : Controller
 
         try
         {
-            var result = _userService.UpdateUser(request);
+            var result = _userService.UpdateUser(request, User.Id());
 
             return Json(new
             {

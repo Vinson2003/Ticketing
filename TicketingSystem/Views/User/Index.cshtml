@@ -105,6 +105,8 @@
         const permsUpdate = @permsUpdate.ToString().ToLower();
         const permsToggleActive = @permsToggleActive.ToString().ToLower();
 
+        const currentUserId = @User.Id();
+
         var userTable;
         $(document).ready(function () {
             userTable = $('#tableUser').DataTable({
@@ -338,11 +340,28 @@
 
                     var data = response.data;
 
+                    $('#hiddenEditRoleId').remove();
+
                     $('#editUserId').val(data.id);
                     $('#editUsername').val(data.username);
                     $('#editName').val(data.name);
                     $('#editEmail').val(data.email ?? '');
                     $('#editRoleId').val(data.roleId);
+
+                    if (data.id === currentUserId) {
+                        $('#editRoleId').prop('disabled', true);
+
+                        $('#formEditUser').append(`
+                            <input type="hidden"
+                               id="hiddenEditRoleId"
+                               name="RoleId"
+                            value="${data.roleId}" />
+                        `);
+                    }
+                    else {
+                        $('#editRoleId').prop('disabled', false);
+                        $('#hiddenEditRoleId').remove();
+                    }
 
                     var modal = bootstrap.Modal.getOrCreateInstance(
                         document.getElementById('modalEditUser')
@@ -385,9 +404,7 @@
 
                 $('#btnUpdateUser').prop('disabled', true)
                 .html(`
-                    <span class="spinner-border
-                                    spinner-border-sm
-                                    me-1">
+                    <span class="spinner-border spinner-border-sm me-1">
                     </span>
                     Saving...
                 `);

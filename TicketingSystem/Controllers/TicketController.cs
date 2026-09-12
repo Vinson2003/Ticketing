@@ -20,8 +20,11 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
         var dropdowns = _ticketService.GetDropdowns();
 
         ViewBag.CategoryList = new SelectList(dropdowns.Categories, "Id", "Name");
+
         ViewBag.PriorityList = new SelectList(dropdowns.Priorities, "Id", "Name");
-        ViewBag.StatusList = new SelectList(dropdowns.Statuses, "Id", "Name");
+
+        ViewBag.StatusList =new SelectList(dropdowns.Statuses, "Id", "Name");
+
         ViewBag.UserList = new SelectList(dropdowns.Users, "Id", "Name");
 
         return View();
@@ -29,7 +32,7 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
 
     // POST: Ticket/Read
     [HttpPost]
-    public JsonResult Read(Datatable datatable, TicketFilter filters)
+    public JsonResult Read(Datatable datatable,TicketFilter filters)
     {
         Support.ProccessFilter(datatable, out var col, out var colIndex, out var sort);
 
@@ -40,7 +43,7 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
                 Start = datatable.Start,
                 Length = datatable.Length
             },
-            filters
+            filters, User.Id(), User.RoleCode()
         );
 
         return new JsonResult(new
@@ -59,26 +62,32 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
     {
         try
         {
-            var result = _ticketService.GetDetails(id);
+            var result = _ticketService.GetDetails(
+                id, User.Id(), User.RoleCode()
+            );
 
             if (result.Result == null)
             {
                 return Json(new
                 {
-                    Success = false, Message = result.Message
+                    Success = false,
+                    Message = result.Message
                 });
             }
 
             return Json(new
             {
-                Success = true, Message = "Success", Data = result.Result
+                Success = true,
+                Message = "Success",
+                Data = result.Result
             });
         }
         catch (Exception ex)
         {
             return Json(new
             {
-                Success = false, Message = ex.Message
+                Success = false,
+                Message = ex.Message
             });
         }
     }
@@ -95,11 +104,14 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
             });
         }
 
-        var createdBy = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
         try
         {
-            var result = _ticketService.CreateTicket(request, createdBy);
+            var roleCode = User.RoleCode();
+
+            var result = _ticketService.CreateTicket(
+                request, User.Id(), User.RoleCode()
+            );
+
             if (!result.Result)
             {
                 return Json(new
@@ -125,6 +137,7 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
         }
     }
 
+
     [HttpPost]
     public JsonResult Update(UpdateTicketRequest request)
     {
@@ -139,7 +152,9 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
 
         try
         {
-            var result = _ticketService.UpdateTicket(request, User.Id());
+            var result = _ticketService.UpdateTicket(
+                request, User.Id(), User.RoleCode()
+            );
 
             if (!result.Result)
             {
@@ -171,7 +186,9 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
     {
         try
         {
-            var result = _ticketService.DeleteTicket(id, User.Id());
+            var result = _ticketService.DeleteTicket(
+                id, User.Id(), User.RoleCode()
+            );
 
             if (!result.Result)
             {
@@ -203,7 +220,18 @@ public class TicketController(ITicketService ticketService, ITicketHistoryServic
     {
         try
         {
-            var result = _ticketHistoryService.GetTicketHistory(id);
+            var result = _ticketHistoryService.GetTicketHistory(
+                id, User.Id(), User.RoleCode()
+            );
+
+            if (result == null)
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message = "Ticket not found or access denied."
+                });
+            }
 
             return Json(new
             {

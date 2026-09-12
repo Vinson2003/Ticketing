@@ -1,38 +1,104 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+html,
+body {
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* =========================
+   Layout
+   ========================= */
+
+.app-wrapper {
+    min-height: 100vh;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/*
+   Main content harus bisa mengecil dengan benar,
+   terutama ketika ada DataTable/table lebar.
+*/
+.app-main {
+    min-width: 0;
 }
+
+/*
+   Beri sedikit ruang bawah pada content,
+   tanpa menggunakan margin-bottom pada body.
+*/
+.app-content {
+    padding-bottom: 1rem;
+}
+
+/*
+   Jangan sampai table menyebabkan seluruh halaman
+   melebar secara horizontal.
+*/
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* =========================
+   Focus
+   ========================= */
+
+/* Button / navbar tidak menggunakan blue focus ring */
+.btn:focus {
+    box-shadow: none;
+}
+
+.btn:focus-visible,
+.btn-link.nav-link:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+/* Form tetap punya focus indicator */
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* =========================
+   Floating Input
+   ========================= */
+
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* =========================
+   Ticket History
+   ========================= */
 
 .ticket-history-container {
     max-height: 320px;
     overflow-y: auto;
+    overflow-x: hidden;
     padding-right: 8px;
 }
 
@@ -77,4 +143,10 @@ body {
 
 .ticket-history-meta {
     font-size: 12px;
+}
+
+.dashboard-chart {
+    position: relative;
+    width: 100%;
+    height: 300px;
 }

@@ -34,6 +34,7 @@ D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\lib\jquery-validation\dist\
 D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\adminlte\js\adminlte.esm.js.map
 D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\lib\jquery-validation\LICENSE.md
 D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\adminlte\css\adminlte-colors-v3.rtl.css.map
+D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\js\dashboard.js
 D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap.css
 D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
 D:\MyProject\TicketingSystem\TicketingSystem\wwwroot\lib\jquery\dist\jquery.slim.js
@@ -204,6 +205,7 @@ wwwroot\adminlte\js\types\treeview.d.ts
 wwwroot\adminlte\js\types\util\index.d.ts
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\js\dashboard.js
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\LICENSE
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css

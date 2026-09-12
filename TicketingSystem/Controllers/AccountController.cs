@@ -57,16 +57,13 @@ public class AccountController(IAuthService authService) : Controller
 
         var claims = new List<Claim>
         {
-            new( ClaimTypes.NameIdentifier, user.Id.ToString()),
-
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.Name),
-
-            new(ClaimTypes.Email, user.Email ?? "" ),
-
+            new(ClaimTypes.Email, user.Email ?? ""),
             new(ClaimTypes.Role, user.RoleName),
 
             new("RoleId", user.RoleId.ToString()),
-
+            new("RoleCode", user.RoleCode),
             new("Username", user.Username)
         };
 
