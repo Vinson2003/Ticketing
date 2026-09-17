@@ -25,6 +25,8 @@ public partial class MtUser
 
     public virtual ICollection<TrTicket> TrTicketAssignedToNavigations { get; set; } = new List<TrTicket>();
 
+    public virtual ICollection<TrTicketComment> TrTicketComments { get; set; } = new List<TrTicketComment>();
+
     public virtual ICollection<TrTicket> TrTicketCreatedByNavigations { get; set; } = new List<TrTicket>();
 
     public virtual ICollection<TrTicketHistory> TrTicketHistories { get; set; } = new List<TrTicketHistory>();

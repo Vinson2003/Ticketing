@@ -14,4 +14,7 @@ INSERT INTO mt_permission(description, display, seq, sub_seq) VALUES
 ('user-details', 'User Details', 2, 3),
 ('user-create', 'User Create', 2, 4),
 ('user-update', 'User Update', 2, 3),
-('user-toggleactive', 'User ToogleActive', 2, 4);
+('user-toggleactive', 'User ToogleActive', 2, 4),
+
+('ticketcomment-getcomments', 'View Comments', 3, 1),
+('ticketcomment-addcomment', 'Add Comment', 3, 2);

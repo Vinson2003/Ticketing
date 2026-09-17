@@ -17,17 +17,6 @@ builder.Services.AddControllersWithViews(options =>
 
 ConfigureService(builder.Services, builder.Configuration);
 
-// Cookie Authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/AccessDenied";
-
-        options.ExpireTimeSpan = TimeSpan.FromHours(8);
-        options.SlidingExpiration = true;
-    });
-
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -68,6 +57,17 @@ void ConfigureService(IServiceCollection services, IConfiguration configuration)
         options.UseSqlServer(connectionString);
     });
 
+    // Cookie Authentication
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+
     // Services
     services.AddScoped<ITicketService, TicketService>();
     services.AddScoped<IAuthService, AuthService>();
@@ -76,6 +76,7 @@ void ConfigureService(IServiceCollection services, IConfiguration configuration)
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<ITicketAccessService, TicketAccessService>();
     services.AddScoped<IDashboardService, DashboardService>();
+    services.AddScoped<ITicketCommentService, TicketCommentService>();
 
     // Add memory cache
     services.AddMemoryCache();

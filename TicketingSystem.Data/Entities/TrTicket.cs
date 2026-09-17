@@ -43,5 +43,7 @@ public partial class TrTicket
 
     public virtual MtTicketStatus Status { get; set; } = null!;
 
+    public virtual ICollection<TrTicketComment> TrTicketComments { get; set; } = new List<TrTicketComment>();
+
     public virtual ICollection<TrTicketHistory> TrTicketHistories { get; set; } = new List<TrTicketHistory>();
 }

@@ -1,5 +1,11 @@
-﻿<!-- Modal Ticket Detail -->
+﻿@{
+    bool permsCommentRead = ViewBag.PermsCommentRead ?? false;
+    bool permsCommentAdd = ViewBag.PermsCommentAdd ?? false;
+}
+
+<!-- Modal Ticket Detail -->
 <div class="modal fade" id="modalTicketDetail" tabindex="-1" aria-labelledby="modalTicketDetailLabel" aria-hidden="true">
+
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
 
@@ -15,146 +21,254 @@
 
             <div class="modal-body">
 
-                <div class="row g-3">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs mb-3" role="tablist">
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">Ticket No</small>
-                        <span id="detailTicketNo" class="fw-semibold">
-                            -
-                        </span>
-                    </div>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active"
+                                id="detail-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#ticket-detail"
+                                type="button">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Detail
+                        </button>
+                    </li>
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Status
-                        </small>
-                        <span id="detailStatus" class="badge text-bg-secondary">
-                            -
-                        </span>
-                    </div>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="history-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#ticket-history"
+                                type="button">
+                            <i class="bi bi-clock-history me-1"></i>
+                            History
+                        </button>
+                    </li>
 
-                    <div class="col-12">
-                        <small class="text-secondary d-block">
-                            Title
-                        </small>
-                        <span id="detailTitle" class="fw-semibold">
-                            -
-                        </span>
-                    </div>
+                    @if (permsCommentRead)
+                    {
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="discussion-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#ticket-discussion"
+                                    type="button">
+                                <i class="bi bi-chat-left-text me-1"></i>
+                                Discussion
+                            </button>
+                        </li>
+                    }
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Category
-                        </small>
-                        <span id="detailCategory">
-                            -
-                        </span>
-                    </div>
+                </ul>
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Priority
-                        </small>
-                        <span id="detailPriority" class="badge text-bg-secondary">
-                            -
-                        </span>
-                    </div>
+                <div class="tab-content">
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Created By
-                        </small>
-                        <span id="detailCreatedBy">
-                            -
-                        </span>
-                    </div>
+                    <!-- DETAIL TAB -->
+                    <div class="tab-pane fade show active" id="ticket-detail">
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Assigned To
-                        </small>
-                        <span id="detailAssignedTo">
-                            -
-                        </span>
-                    </div>
+                        <div class="row g-3">
 
-                    <div class="col-12">
-                        <small class="text-secondary d-block mb-1">
-                            Description
-                        </small>
-                        <div id="detailDescription" class="border rounded p-3 bg-body-tertiary" style="min-height: 100px;">
-                            -
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Ticket No
+                                </small>
+
+                                <span id="detailTicketNo" class="fw-semibold">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Status
+                                </small>
+
+                                <span id="detailStatus" class="badge text-bg-secondary">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-12">
+                                <small class="text-secondary d-block">
+                                    Title
+                                </small>
+
+                                <span id="detailTitle" class="fw-semibold">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Category
+                                </small>
+
+                                <span id="detailCategory">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Priority
+                                </small>
+
+                                <span id="detailPriority"
+                                      class="badge text-bg-secondary">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Created By
+                                </small>
+
+                                <span id="detailCreatedBy">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Assigned To
+                                </small>
+
+                                <span id="detailAssignedTo">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-12">
+                                <small class="text-secondary d-block mb-1">
+                                    Description
+                                </small>
+
+                                <div id="detailDescription" class="border rounded p-3 bg-body-tertiary"
+                                     style="min-height: 100px;">
+                                    -
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Created At
+                                </small>
+
+                                <span id="detailCreatedAt">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Updated At
+                                </small>
+
+                                <span id="detailUpdatedAt">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Resolved At
+                                </small>
+
+                                <span id="detailResolvedAt">
+                                    -
+                                </span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-secondary d-block">
+                                    Closed At
+                                </small>
+
+                                <span id="detailClosedAt">
+                                    -
+                                </span>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <hr />
-                    </div>
+                    <!-- HISTORY TAB -->
+                    <div class="tab-pane fade" id="ticket-history">
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Created At
-                        </small>
-                        <span id="detailCreatedAt">
-                            -
-                        </span>
-                    </div>
+                        <div id="ticketHistory" class="ticket-history-container">
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Updated At
-                        </small>
-                        <span id="detailUpdatedAt">
-                            -
-                        </span>
-                    </div>
+                            <div class="text-center text-secondary py-3">
+                                <div class="spinner-border spinner-border-sm me-1"
+                                     role="status">
+                                </div>
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Resolved At
-                        </small>
-                        <span id="detailResolvedAt">
-                            -
-                        </span>
-                    </div>
+                                Loading history...
+                            </div>
 
-                    <div class="col-md-6">
-                        <small class="text-secondary d-block">
-                            Closed At
-                        </small>
-                        <span id="detailClosedAt">
-                            -
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="mt-3">
-
-                <h6 class="fw-semibold mb-3">
-                    <i class="bi bi-clock-history me-1"></i>
-                        Ticket History
-                </h6>
-
-                <div id="ticketHistory" class="ticket-history-container">
-                    <div class="text-center text-secondary py-3">
-
-                        <div class="spinner-border spinner-border-sm me-1"
-                             role="status">
                         </div>
-                        Loading history...
                     </div>
+
+                    <!-- DISCUSSION TAB -->
+                    @if (permsCommentRead)
+                    {
+                        <div class="tab-pane fade" id="ticket-discussion">
+
+                            <div id="ticketCommentContainer"
+                                 class="ticket-comment-container mb-3">
+
+                                <div class="text-center text-secondary py-3">
+                                    No comments yet.
+                                </div>
+
+                            </div>
+
+                            @if (permsCommentAdd)
+                            {
+                                <form id="formTicketComment">
+
+                                    <input type="hidden" id="commentTicketId" name="TicketId" />
+
+                                    <div class="mb-2">
+                                        <textarea class="form-control"
+                                                  id="ticketComment"
+                                                  name="Comment"
+                                                  rows="3"
+                                                  maxlength="2000"
+                                                  placeholder="Write a comment..."></textarea>
+                                    </div>
+
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary btn-sm">
+
+                                            <i class="bi bi-send me-1"></i>
+                                            Send
+
+                                        </button>
+                                    </div>
+
+                                </form>
+                            }
+
+                        </div>
+                    }
+
                 </div>
 
             </div>
 
             <div class="modal-footer">
+
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                     <i class="bi bi-x-circle me-1"></i>
                     Close
                 </button>
+
             </div>
 
         </div>

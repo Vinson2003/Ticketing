@@ -142,3 +142,18 @@ CREATE TABLE mt_rolepermission
         UNIQUE(role_id, permission_id)
 );
 GO
+
+CREATE TABLE tr_ticket_comment
+(
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    ticket_id INT NOT NULL,
+    user_id INT NOT NULL,
+    comment VARCHAR(2000) NOT NULL,
+    created_at DATETIME2 NOT NULL,
+
+    CONSTRAINT FK_tr_ticket_comment_ticket
+        FOREIGN KEY (ticket_id) REFERENCES tr_ticket(id),
+
+    CONSTRAINT FK_tr_ticket_comment_user
+        FOREIGN KEY (user_id) REFERENCES mt_user(id)
+);

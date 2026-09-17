@@ -28,6 +28,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<TrTicket> TrTickets { get; set; }
 
+    public virtual DbSet<TrTicketComment> TrTicketComments { get; set; }
+
     public virtual DbSet<TrTicketHistory> TrTicketHistories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -222,6 +224,32 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.StatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tr_ticket_status");
+        });
+
+        modelBuilder.Entity<TrTicketComment>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__tr_ticke__3213E83FD61752B3");
+
+            entity.ToTable("tr_ticket_comment");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Comment)
+                .HasMaxLength(2000)
+                .IsUnicode(false)
+                .HasColumnName("comment");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.TicketId).HasColumnName("ticket_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Ticket).WithMany(p => p.TrTicketComments)
+                .HasForeignKey(d => d.TicketId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tr_ticket_comment_ticket");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TrTicketComments)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tr_ticket_comment_user");
         });
 
         modelBuilder.Entity<TrTicketHistory>(entity =>
