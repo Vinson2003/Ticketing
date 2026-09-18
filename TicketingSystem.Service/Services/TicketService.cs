@@ -9,8 +9,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TicketingSystem.Service.Services;
 
-public class TicketService(AppDbContext context, ITicketHistoryService ticketHistoryService, 
-    ITicketAccessService ticketAccessService) : ITicketService
+public class TicketService(AppDbContext context, ITicketHistoryService ticketHistoryService, ITicketAccessService ticketAccessService) : ITicketService
 {
     private readonly AppDbContext _context = context;
     private readonly ITicketHistoryService _ticketHistoryService = ticketHistoryService;

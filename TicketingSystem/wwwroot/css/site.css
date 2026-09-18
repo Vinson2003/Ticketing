@@ -152,6 +152,128 @@ body {
 }
 
 /* =========================
-   Ticket Comment
+   Ticket Discussion
    ========================= */
 
+.ticket-discussion {
+    width: 100%;
+}
+
+.ticket-discussion-list {
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 16px;
+    padding: 4px 6px;
+}
+
+
+/* =========================
+   Message
+   ========================= */
+
+.ticket-message {
+    display: flex;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+
+/* Other user */
+.ticket-message-left {
+    justify-content: flex-start;
+}
+
+
+/* Current user */
+.ticket-message-right {
+    justify-content: flex-end;
+}
+
+
+.ticket-message-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+}
+
+
+/* =========================
+   User + Date
+   ========================= */
+
+.ticket-message-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+
+/* Right-side message info */
+.ticket-message-right .ticket-message-info {
+    justify-content: flex-end;
+}
+
+
+.ticket-message-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+}
+
+
+.ticket-message-date {
+    font-size: 11px;
+    color: var(--bs-secondary-color);
+    white-space: nowrap;
+}
+
+
+/* =========================
+   Message Bubble
+   ========================= */
+
+.ticket-message-bubble {
+    padding: 8px 12px;
+
+    border-radius: 10px;
+
+    line-height: 1.5;
+
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+
+/* Other user's bubble */
+.ticket-message-left .ticket-message-bubble {
+    background-color: var(--bs-tertiary-bg);
+
+    border-top-left-radius: 2px;
+}
+
+
+/* Current user's bubble */
+.ticket-message-right .ticket-message-bubble {
+    background-color: rgba(var(--bs-primary-rgb), 0.22);
+
+    border-top-right-radius: 2px;
+}
+
+
+/* =========================
+   Comment Form
+   ========================= */
+
+.ticket-discussion-form {
+    width: 100%;
+}
+
+
+.ticket-discussion-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+}

@@ -169,6 +169,8 @@
         const permsCommentRead = @permsCommentRead.ToString().ToLower();
         const permsCommentAdd = @permsCommentAdd.ToString().ToLower();
 
+        const currentUserName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.Identity?.Name ?? ""));
+
         var ticketTable;
         $(() => {
             tableTicket();
@@ -837,8 +839,7 @@
             if (!data || data.length === 0) {
 
                 $('#ticketCommentContainer').html(`
-                    <div class="text-secondary text-center py-3">
-                        <i class="bi bi-chat-left-text d-block fs-4 mb-1"></i>
+                    <div class="text-center text-secondary py-3">
                         No comments yet.
                     </div>
                 `);
@@ -850,25 +851,30 @@
 
             data.forEach(function(item) {
 
+                const isMine = (item.userName ?? '').toLowerCase() === (currentUserName ?? '').toLowerCase();
+
+                const positionClass = isMine ? 'ticket-message-right' : 'ticket-message-left';
+
                 html += `
-                    <div class="ticket-comment-item">
+                    <div class="ticket-message ${positionClass}">
 
-                        <div class="d-flex justify-content-between
-                                    align-items-start gap-2 mb-1">
+                        <div class="ticket-message-content">
 
-                            <div class="fw-semibold">
-                                <i class="bi bi-person-circle me-1"></i>
-                                ${escapeHtml(item.userName)}
+                            <div class="ticket-message-info">
+                                <span class="ticket-message-user">
+                                    <i class="bi bi-person-circle"></i>
+                                    ${escapeHtml(item.userName)}
+                                </span>
+
+                                <span class="ticket-message-date">
+                                    ${escapeHtml(item.createdAtText)}
+                                </span>
                             </div>
 
-                            <small class="text-secondary text-nowrap">
-                                ${escapeHtml(item.createdAtText)}
-                            </small>
+                            <div class="ticket-message-bubble">
+                                ${escapeHtml(item.comment)}
+                            </div>
 
-                        </div>
-
-                        <div class="ticket-comment-text">
-                            ${escapeHtml(item.comment)}
                         </div>
 
                     </div>
@@ -877,8 +883,7 @@
 
             $('#ticketCommentContainer').html(html);
 
-            const container =
-                document.getElementById('ticketCommentContainer');
+            const container = document.getElementById('ticketCommentContainer');
 
             if (container) {
                 container.scrollTop = container.scrollHeight;
